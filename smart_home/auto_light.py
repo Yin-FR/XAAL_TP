@@ -19,10 +19,11 @@ addr_light_bathroom = "ccc44227-d4fc-46eb-8578-159e2c47da06"
 addr_screen = "2d42a742-aa2f-11e9-ac3b-a4badbf92501"
 addr_shutter = "2fe70f46-3ece-44d1-af34-2d82e10fb854"
 
+duration_tv = 5 * 60
+duration_light = 1 * 60
+
 
 def display(msg):
-    # if str(msg.source) == "87b387c2-20b5-11e9-b352-a4badbf92500":
-    # msg.dump()
     print(msg.body.keys())
 
 
@@ -49,7 +50,7 @@ async def get_value_presence(msg):
                 eng.send_request(dev, [tools.get_uuid(addr_screen)], "turn_on")
             else:
                 eng.send_request(dev, [tools.get_uuid(addr_screen)], "turn_off")
-    elif str(msg.source) == addr_bed_pressure:
+    elif str(msg.source) == addr_bed_pressure: # not tested
         if "detected" in msg.body.keys():
             if msg.body["detected"]:
                 eng.send_request(dev, [tools.get_uuid(addr_screen)], "down")
