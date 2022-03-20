@@ -6,6 +6,7 @@
 # @说明:
 from xaal.lib import Engine, helpers, AsyncEngine, tools
 from xaal.schemas import devices
+import asyncio
 
 helpers.set_console_title("xaal-dumper")
 
@@ -21,6 +22,7 @@ addr_shutter = "2fe70f46-3ece-44d1-af34-2d82e10fb854"
 
 duration_tv = 5 * 60
 duration_light = 1 * 60
+duration_shutter = 1 * 60
 
 
 def display(msg):
@@ -35,26 +37,28 @@ async def get_value_presence(msg):
             if msg.body["presence"]:
                 eng.send_request(dev, [tools.get_uuid(addr_light_kitchen)], "turn_on")
             else:
+                await asyncio.sleep(duration_light)
                 eng.send_request(dev, [tools.get_uuid(addr_light_kitchen)], "turn_off")
     elif str(msg.source) == addr_bathroom_zone:
         if "presence" in msg.body.keys():
-            # print(msg.body["presence"])
-            # print(type(msg.body["presence"]))
             if msg.body["presence"]:
                 eng.send_request(dev, [tools.get_uuid(addr_light_bathroom)], "turn_on")
             else:
+                await asyncio.sleep(duration_light)
                 eng.send_request(dev, [tools.get_uuid(addr_light_bathroom)], "turn_off")
     elif str(msg.source) == addr_sofa_pressure:
         if "detected" in msg.body.keys():
             if msg.body["detected"]:
                 eng.send_request(dev, [tools.get_uuid(addr_screen)], "turn_on")
             else:
+                await asyncio.sleep(duration_tv)
                 eng.send_request(dev, [tools.get_uuid(addr_screen)], "turn_off")
-    elif str(msg.source) == addr_bed_pressure: # not tested
+    elif str(msg.source) == addr_bed_pressure:  # not tested
         if "detected" in msg.body.keys():
             if msg.body["detected"]:
                 eng.send_request(dev, [tools.get_uuid(addr_screen)], "down")
             else:
+                await asyncio.sleep(duration_shutter)
                 eng.send_request(dev, [tools.get_uuid(addr_screen)], "up")
 
 
